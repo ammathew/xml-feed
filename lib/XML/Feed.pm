@@ -32,7 +32,7 @@ sub new {
 
 sub init_empty { 1 }
 
-sub parse {    
+sub parse {
     my $class = shift;
     my($stream, $specified_format) = @_;
     return $class->error("Stream parameter is required") unless $stream;
