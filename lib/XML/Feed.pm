@@ -22,9 +22,6 @@ BEGIN {
 sub new {
     my $class = shift;
     my $format = shift || 'Atom';
-
-
-
     my $format_class = 'XML::Feed::Format::' . $format;
     eval "use $format_class";
     Carp::croak("Unsupported format $format: $@") if $@;
@@ -35,16 +32,12 @@ sub new {
 
 sub init_empty { 1 }
 
-sub parse {
-    
+sub parse {    
     my $class = shift;
     my($stream, $specified_format) = @_;
-
-
     return $class->error("Stream parameter is required") unless $stream;
     my $feed = bless {}, $class;
     my $xml = '';
-
     if (blessed($stream) and $stream->isa('URI')) {
         my $ua  = LWP::UserAgent->new;
         $ua->agent(__PACKAGE__ . "/$VERSION");
@@ -71,21 +64,11 @@ sub parse {
     return $class->error("Can't get feed XML content from $stream")
         unless $xml;
     my $format;
-
-
     if ($specified_format) {
-
         $format = $specified_format;
     } else {
-        warn "\n spec format does not exist\n";
         $format = $feed->identify_format(\$xml) or return $class->error($feed->errstr);
-        warn "\n format from specified format \n";
-        warn $format;
-        
     }
-    
-    warn "\n this is format \n";
-    warn $format;
 
     my $format_class = join '::', __PACKAGE__, "Format", $format;
     eval "use $format_class";
@@ -105,7 +88,6 @@ sub identify_format {
 		my ($name) = ($class =~ m!([^:]+)$!);
 		# TODO ugly
 		my $tmp = $$xml;
-
 		return $name if eval { $class->identify(\$tmp) };
 		return $feed->error($@) if $@;
 	} 

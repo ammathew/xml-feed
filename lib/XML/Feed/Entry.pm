@@ -28,8 +28,6 @@ sub new {
     eval "use $format_class";
     Carp::croak("Unsupported format $format: $@") if $@;
     my $entry = bless {}, join('::', __PACKAGE__, "Format", $format);
-
-
     $entry->init_empty or return $class->error($entry->errstr);
     $entry;
 }
@@ -38,10 +36,6 @@ sub init_empty { 1 }
 
 sub convert {
     my $entry = shift;
-
-
-    warn "\n\n\n passed through convert \n\n\n\n";
-
     my($format) = @_;
     my $new = __PACKAGE__->new($format);
     for my $field (qw( title link content summary author id issued modified lat long media )) {

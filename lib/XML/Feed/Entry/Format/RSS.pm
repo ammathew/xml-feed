@@ -221,13 +221,8 @@ sub enclosure {
 
 sub media {
     my $item = shift->{entry};
-
-    warn "\n\n passed through media \n\n";
-
     my $media_url = $item->{'media:group'}{'media:content'}[1]{'-url'};
-    
     return $media_url;
-
 }
 
 1;
