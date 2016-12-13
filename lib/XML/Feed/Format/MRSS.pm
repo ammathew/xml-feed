@@ -243,9 +243,6 @@ sub add_entry {
     my $entry = shift || return;
     $entry    = $feed->_convert_entry($entry);
     
-    use Pry;
-    pry();
-    
     $feed->{rss}->add_item(%{ $entry->unwrap });
 }
 
