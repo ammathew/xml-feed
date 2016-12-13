@@ -255,8 +255,6 @@ $_[0]->{rss}->as_string
 
 sub parse {
     warn "\n in mrss  parse \n";
-
-
 }
 
 1;
