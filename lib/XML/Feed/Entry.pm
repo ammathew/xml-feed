@@ -10,8 +10,6 @@ use Scalar::Util qw( blessed );
 
 use Carp;
 
-use XML::Feed::Entry::Format::MRSS; #need to put this in the right place .. eg XML::Feed::Entry prob
-
 sub wrap {
     my $class = shift;
     my($item) = @_;
@@ -27,7 +25,9 @@ sub new {
     my $format_class = 'XML::Feed::Format::' . $format;
     eval "use $format_class";
     Carp::croak("Unsupported format $format: $@") if $@;
-    my $entry = bless {}, join('::', __PACKAGE__, "Format", $format);
+   # my $entry = bless {}, join('::', __PACKAGE__, "Format", $format);
+    
+    my $entry = bless {}, join('::', __PACKAGE__, "Format", 'RSS');
     $entry->init_empty or return $class->error($entry->errstr);
     $entry;
 }
