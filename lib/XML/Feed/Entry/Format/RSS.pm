@@ -218,6 +218,5 @@ sub enclosure {
     }
 }
 
-
 1;
 

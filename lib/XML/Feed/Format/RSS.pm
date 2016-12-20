@@ -191,6 +191,5 @@ sub add_entry {
 
 sub as_xml { $_[0]->{rss}->as_string }
 
-
 1;
 
