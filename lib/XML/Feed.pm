@@ -70,21 +70,13 @@ sub parse {
         $format = $feed->identify_format(\$xml) or return $class->error($feed->errstr);
     }
 
-#    my $format_class = join '::', __PACKAGE__, "Format", $format;
-    my $format_class = join '::', __PACKAGE__, "Format", 'RSS';
+    my $format_class = join '::', __PACKAGE__, "Format", $format;
 
     eval "use $format_class";
     return $class->error("Unsupported format $format: $@") if $@;
     bless $feed, $format_class;
 
-   # $feed->init_string(\$xml) or return $class->error($feed->errstr); # need to put this back
-    
-    if ( $format eq 'MRSS' ) {
-        my $feed = $feed->init_string_mrss(\$xml);  
-
-    } else {
-        my $feed = $feed->init_string(\$xml);  
-    }
+    $feed->init_string(\$xml) or return $class->error($feed->errstr); # need to put this back
 
     return $feed;
 }

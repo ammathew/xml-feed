@@ -2,7 +2,7 @@ package XML::Feed::Format::MRSS;
 use strict;
 use warnings;
 
-use XML::Feed:Format::RSS
+use base qw( XML::Feed::Format::RSS );
 
 use XML::FeedPP;
 
@@ -15,6 +15,7 @@ sub init_string {
     $feed->init_empty;
 
     my $feed_copy = $feed;
+
     my $parsed_feed = $feed_copy->{rss}->parse( $$str );
     my $parsed_feed_items = $parsed_feed->{items};
     
@@ -47,5 +48,10 @@ sub init_string {
 
     };
 
+    warn "\n made it to end of mrss init string \n";
+
     return $feed
 }
+
+
+1;
