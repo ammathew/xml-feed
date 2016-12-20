@@ -71,14 +71,12 @@ sub parse {
     }
 
     my $format_class = join '::', __PACKAGE__, "Format", $format;
-
     eval "use $format_class";
     return $class->error("Unsupported format $format: $@") if $@;
     bless $feed, $format_class;
 
-    $feed->init_string(\$xml) or return $class->error($feed->errstr); # need to put this back
-
-    return $feed;
+    $feed->init_string(\$xml) or return $class->error($feed->errstr); 
+    $feed;
 }
 
 sub identify_format {

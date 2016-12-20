@@ -48,8 +48,6 @@ sub init_string {
 
     };
 
-    warn "\n made it to end of mrss init string \n";
-
     return $feed
 }
 
