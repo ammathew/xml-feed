@@ -6,7 +6,6 @@ our $VERSION = '0.53';
 
 use base qw( XML::Feed );
 use XML::Atom::Feed;
-
 use XML::Atom::Util qw( iso2dt );
 use List::Util qw( first );
 use DateTime::Format::W3CDTF;

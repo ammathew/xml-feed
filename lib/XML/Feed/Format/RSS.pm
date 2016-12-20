@@ -11,8 +11,6 @@ use XML::Atom::Util qw(iso2dt);
 use XML::Feed::Enclosure;
 use XML::Feed::Entry::Format::RSS;
 
-use XML::FeedPP;
-
 our $PREFERRED_PARSER = "XML::RSS";
 
 
@@ -50,7 +48,6 @@ sub init_string {
     }
     $feed;
 }
-
 
 sub format { 'RSS ' . $_[0]->{rss}->{'version'} }
 
@@ -194,12 +191,6 @@ sub add_entry {
 
 sub as_xml { $_[0]->{rss}->as_string }
 
-sub media {
-    my $item = shift->{entry};
-
-    my $media_url = $item->{'media:group'}{'media:content'}[1]{'-url'};
-    return $media_url;
-}
 
 1;
 

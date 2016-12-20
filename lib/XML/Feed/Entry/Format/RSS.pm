@@ -219,11 +219,5 @@ sub enclosure {
 }
 
 
-sub media {
-    my $item = shift->{entry};
-    my $media_url = $item->{'media:group'}{'media:content'}[1]{'-url'};
-    return $media_url;
-}
-
 1;
 
