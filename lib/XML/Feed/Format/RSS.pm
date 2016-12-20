@@ -11,6 +11,8 @@ use XML::Atom::Util qw(iso2dt);
 use XML::Feed::Enclosure;
 use XML::Feed::Entry::Format::RSS;
 
+use XML::FeedPP;
+
 our $PREFERRED_PARSER = "XML::RSS";
 
 
@@ -30,6 +32,8 @@ sub init_empty {
     $feed->{rss}->add_module(prefix => "dcterms", uri => 'http://purl.org/dc/terms/');    
     $feed->{rss}->add_module(prefix => "atom", uri => 'http://www.w3.org/2005/Atom');
     $feed->{rss}->add_module(prefix => "geo", uri => 'http://www.w3.org/2003/01/geo/wgs84_pos#');
+    $feed->{rss}->add_module(prefix => "media", uri => 'http://search.yahoo.com/mrss');
+    
     $feed;
 }
 
@@ -45,6 +49,50 @@ sub init_string {
         $feed->{rss}->parse($$str, $opts );
     }
     $feed;
+}
+
+sub init_string_mrss {
+
+    my $feed = shift;
+    my($str) = @_;
+
+    #here, convert feedPP to XML::RSS feed
+    $feed->init_empty;
+
+    my $feed_copy = $feed;
+    my $parsed_feed = $feed_copy->{rss}->parse( $$str );
+    my $parsed_feed_items = $parsed_feed->{items};
+    
+    my $blah = XML::FeedPP->new( $$str );
+    
+    $feed->init_empty;
+
+    foreach my $key ( keys $parsed_feed->{channel}   ) { 
+
+        $feed->{rss}->channel( $key => $parsed_feed->{channel}->{ $key } ); 
+    }
+
+
+    foreach my $item ( $blah->get_item() ) { 
+   
+        my $guid = $item->{guid}->{'#text' };
+
+        $item->{guid} = $guid; # this needs to be fixed ... $item->{guid} should already come in as a string
+
+
+        foreach my $parsed_feed_item ( @$parsed_feed_items ) {
+
+            if ( $parsed_feed_item->{'guid'} eq $guid ) {
+
+                $feed->{rss}->add_item( %$item ) 
+          
+            }
+            
+        }
+
+    };
+
+    return $feed
 }
 
 sub format { 'RSS ' . $_[0]->{rss}->{'version'} }
@@ -188,6 +236,13 @@ sub add_entry {
 }
 
 sub as_xml { $_[0]->{rss}->as_string }
+
+sub media {
+    my $item = shift->{entry};
+
+    my $media_url = $item->{'media:group'}{'media:content'}[1]{'-url'};
+    return $media_url;
+}
 
 1;
 
