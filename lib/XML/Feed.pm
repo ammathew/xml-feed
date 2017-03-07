@@ -74,8 +74,11 @@ sub parse {
     eval "use $format_class";
     return $class->error("Unsupported format $format: $@") if $@;
     bless $feed, $format_class;
-    $feed->init_string(\$xml) or return $class->error($feed->errstr);
-    $feed;
+
+   # $feed->init_string(\$xml) or return $class->error($feed->errstr); # need to put this back
+    my $feed = $feed->init_string(\$xml);  
+
+    return $feed;
 }
 
 sub identify_format {

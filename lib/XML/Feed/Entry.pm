@@ -10,6 +10,8 @@ use Scalar::Util qw( blessed );
 
 use Carp;
 
+use XML::Feed::Entry::Format::MRSS; #need to put this in the right place .. eg XML::Feed::Entry prob
+
 sub wrap {
     my $class = shift;
     my($item) = @_;
@@ -36,7 +38,7 @@ sub convert {
     my $entry = shift;
     my($format) = @_;
     my $new = __PACKAGE__->new($format);
-    for my $field (qw( title link content summary author id issued modified lat long )) {
+    for my $field (qw( title link content summary author id issued modified lat long media )) {
         my $val = $entry->$field();
         next unless defined $val;
         next if blessed $val && $val->isa('XML::Feed::Content') && ! defined $val->body;

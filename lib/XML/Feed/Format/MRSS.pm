@@ -7,13 +7,11 @@ use base qw( XML::Feed::Format::RSS );
 use XML::FeedPP;
 
 sub init_string {
-
     my $feed = shift;
     my($str) = @_;
 
     #here, convert feedPP to XML::RSS feed
     $feed->init_empty;
-
     my $feed_copy = $feed;
 
     my $parsed_feed = $feed_copy->{rss}->parse( $$str );
@@ -22,6 +20,7 @@ sub init_string {
     my $blah = XML::FeedPP->new( $$str );
     
     $feed->init_empty;
+
 
     foreach my $key ( keys $parsed_feed->{channel}   ) { 
 
