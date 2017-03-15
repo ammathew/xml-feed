@@ -6,6 +6,26 @@ use base qw( XML::Feed::Format::RSS );
 
 use XML::FeedPP;
 
+sub identify {
+    my $class   = shift;
+    my $xml     = shift;
+
+    my $feed = XML::FeedPP->new( $$xml );
+    my $is_mrss = 1;
+    if ( index($$xml, "xmlns:media=\"http://search.yahoo.com/mrss/\"" ) < 0 ) {
+        $is_mrss = 0;
+    }
+
+    foreach my $item ( $feed->get_item() ) {
+        if ( ! $item->{'media:content'} )  {
+            $is_mrss = 0;
+        }
+    }
+
+    return ($is_mrss);
+}
+
+
 sub init_string {
     my $feed = shift;
     my($str) = @_;
