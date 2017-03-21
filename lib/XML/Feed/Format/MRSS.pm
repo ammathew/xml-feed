@@ -73,4 +73,13 @@ sub init_string {
 }
 
 
+sub entries {
+    my $rss = $_[0]->{rss};
+    my @entries;
+    for my $item (@{ $rss->{items} }) {
+        push @entries, XML::Feed::Entry::Format::MRSS->wrap($item);
+    }
+    @entries;
+}
+
 1;
