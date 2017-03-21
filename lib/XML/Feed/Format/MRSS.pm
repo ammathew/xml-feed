@@ -6,6 +6,8 @@ use base qw( XML::Feed::Format::RSS );
 
 use XML::FeedPP;
 
+sub format { 'MRSS' }
+
 sub identify {
     my $class   = shift;
     my $xml     = shift;
