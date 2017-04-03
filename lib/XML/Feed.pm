@@ -75,8 +75,7 @@ sub parse {
     return $class->error("Unsupported format $format: $@") if $@;
     bless $feed, $format_class;
 
-   # $feed->init_string(\$xml) or return $class->error($feed->errstr); # need to put this back
-    my $feed = $feed->init_string(\$xml);  
+    $feed->init_string(\$xml) or return $class->error($feed->errstr);
 
     return $feed;
 }

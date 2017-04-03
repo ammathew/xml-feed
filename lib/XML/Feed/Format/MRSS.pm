@@ -31,42 +31,29 @@ sub identify {
 sub init_string {
     my $feed = shift;
     my($str) = @_;
+    #Create XML::Feed object using both XML::Feed->parse and equivalent method in FeedPP
+    #Channel fields populated by XML::Feed output.
+    #Item fields populated by FeedPP output ( handles media:* fields )
 
-    #here, convert feedPP to XML::RSS feed
     $feed->init_empty;
     my $feed_copy = $feed;
-
     my $parsed_feed = $feed_copy->{rss}->parse( $$str );
-    my $parsed_feed_items = $parsed_feed->{items};
-    
-    my $blah = XML::FeedPP->new( $$str );
-    
+    my $feedpp_output = XML::FeedPP->new( $$str );
     $feed->init_empty;
 
-
     foreach my $key ( keys $parsed_feed->{channel}   ) { 
-
         $feed->{rss}->channel( $key => $parsed_feed->{channel}->{ $key } ); 
     }
 
-
-    foreach my $item ( $blah->get_item() ) { 
-   
-        my $guid = $item->{guid}->{'#text' };
-
-        $item->{guid} = $guid; # this needs to be fixed ... $item->{guid} should already come in as a string
-
-
+    my $parsed_feed_items = $parsed_feed->{items};
+    foreach my $feedpp_item (  $feedpp_output->get_item() ) {
+        my $guid = $feedpp_item->{guid}->{'#text' };
+        $feedpp_item->{guid} = $guid; # replace guid hash created by FeedPP with just guid string
         foreach my $parsed_feed_item ( @$parsed_feed_items ) {
-
             if ( $parsed_feed_item->{'guid'} eq $guid ) {
-
-                $feed->{rss}->add_item( %$item ) 
-          
+                $feed->{rss}->add_item( %$feedpp_item );
             }
-            
         }
-
     };
 
     return $feed
