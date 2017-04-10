@@ -19,8 +19,11 @@ sub identify {
     }
 
     foreach my $item ( $feed->get_item() ) {
-        if ( ! $item->{'media:content'} )  {
+        if ( ! $item->{'media:content'}  )  {
             $is_mrss = 0;
+            if ( ! $item->{'media:content'}->{'-url'} ) {
+                $is_mrss = 0;
+            }
         }
     }
 
