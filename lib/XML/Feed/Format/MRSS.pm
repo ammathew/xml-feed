@@ -4,6 +4,8 @@ use warnings;
 
 use base qw( XML::Feed::Format::RSS );
 
+use XML::Feed::Entry::Format::MRSS;
+
 use XML::FeedPP;
 
 sub format { 'MRSS' }
